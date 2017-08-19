@@ -10,7 +10,6 @@ import CoreLocation
 import MapKit
 
 public class SwiftMapVC: UIViewController {
-    var buildings = [Building]()
     var storedStatusColor: UIBarStyle?
     var buttonColor: UIColor?
     var titleColor: UIColor?
@@ -25,19 +24,14 @@ public class SwiftMapVC: UIViewController {
     var pinTitle: String!
     var latitude: Double!
     var longitude: Double!
-    var current: Bool!
 
     ////////////////////////////////////////////////
 
-    public convenience init(location: String, current: Bool) {
+    public convenience init(name: String, latitude: Double, longitude: Double) {
         self.init()
-        buildings = appDelegate.buildingData
-        if let temp = buildings.filter({$0.name == location}).first {
-            self.current = current
-            self.pinTitle = temp.name
-            self.latitude = temp.latitude
-            self.longitude = temp.longitude
-        }
+        self.pinTitle = name
+        self.latitude = latitude
+        self.longitude = longitude
     }
 
     ////////////////////////////////////////////////

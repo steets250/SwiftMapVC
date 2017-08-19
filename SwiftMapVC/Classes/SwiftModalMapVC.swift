@@ -13,8 +13,8 @@ public class SwiftModalMapVC: UINavigationController {
         case lightBlue, dark
     }
 
-    public init(location: String, current: Bool, theme: SwiftModalMapVCTheme = .lightBlue) {
-        let mapViewController = SwiftMapVC(location: location, current: current)
+    public init(name: String, latitude: Double, longitude: Double, theme: SwiftModalMapVCTheme = .lightBlue) {
+        let mapViewController = SwiftMapVC(name: name, latitude: latitude, longitude: longitude)
         mapViewController.storedStatusColor = UINavigationBar.appearance().barStyle
         let doneButton = UIBarButtonItem(image: #imageLiteral(resourceName: "Dismiss"),
                                          style: UIBarButtonItemStyle.plain,
