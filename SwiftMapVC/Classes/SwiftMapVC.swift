@@ -1,9 +1,8 @@
 //
 //  SwiftMapVC.swift
 //
-//  Created by Myles Ringle on 24/06/2015.
-//  Transcribed from code used in SVMapViewController.
-//  Copyright (c) 2015 Myles Ringle & Sam Vermette. All rights reserved.
+//  Created by Steven Steiner on 08/19/2017.
+//  Copyright (c) 2017 steets250. All rights reserved.
 //
 
 import CoreLocation
