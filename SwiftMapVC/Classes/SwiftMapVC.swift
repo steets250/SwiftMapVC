@@ -43,11 +43,6 @@ public class SwiftMapVC: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
 
-        let uidtgr = UITapGestureRecognizer(target: self, action: #selector(revealRegionDetailsWithLongPressOnMap))
-        uidtgr.numberOfTapsRequired = 2
-        uidtgr.numberOfTouchesRequired = 1
-
-        mapView.addGestureRecognizer(uidtgr)
         mapView.mapType = MKMapType.standard
         mapView.showsUserLocation = true
         mapView.showsScale = true
@@ -66,6 +61,13 @@ public class SwiftMapVC: UIViewController {
         let annotation = MKPointAnnotation()
         annotation.coordinate = location
         mapView.addAnnotation(annotation)
+        
+        let mapCamera = MKMapCamera()
+        mapCamera.centerCoordinate = location
+        mapCamera.pitch = 45
+        mapCamera.altitude = 500
+        mapCamera.heading = 329
+        mapView.camera = mapCamera
     }
 
     override public func viewWillAppear(_ animated: Bool) {
@@ -90,15 +92,6 @@ public class SwiftMapVC: UIViewController {
         super.viewWillAppear(true)
         self.navigationController?.setToolbarHidden(true, animated: false)
     }
-
-    //Diagnostic
-    func revealRegionDetailsWithLongPressOnMap(sender: UILongPressGestureRecognizer) {
-        if sender.state != UIGestureRecognizerState.began { return }
-        let touchLocation = sender.location(in: mapView)
-        let locationCoordinate = mapView.convert(touchLocation, toCoordinateFrom: mapView)
-        print("Tapped at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
-    }
-    //End Diagnostic
 
     func doneButtonTapped() {
         closing = true
