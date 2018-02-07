@@ -12,7 +12,7 @@ Makes showing locations each to accomplish. Given the coordinates for the locati
   s.author           = { 'Steven Steiner' => 'steets250.com' }
   s.source           = { :git => 'https://github.com/steet250/SwiftMapVC.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/steets250'
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
 
   s.source_files = 'SwiftMapVC/Classes/**/*'
 end
