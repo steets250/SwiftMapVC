@@ -21,14 +21,22 @@ public class SwiftMapVC: UIViewController {
     }()
 
     var pinTitle: String!
+    var pageTitle: String!
     var latitude: Double!
     var longitude: Double!
 
     ////////////////////////////////////////////////
 
-    public convenience init(name: String, latitude: Double, longitude: Double) {
+    public convenience init(room: String, building: String, floor: Int, latitude: Double, longitude: Double) {
         self.init()
-        self.pinTitle = name
+        self.pinTitle = room
+        if floor == 0 {
+            self.pageTitle = building
+        } else if floor == 1 {
+            self.pageTitle = building + " - 1st Floor"
+        } else if floor == 2 {
+            self.pageTitle = building + " - 2nd Floor"
+        }
         self.latitude = latitude
         self.longitude = longitude
     }
@@ -49,19 +57,16 @@ public class SwiftMapVC: UIViewController {
         mapView.showsCompass = true
         mapView.showsBuildings = true
 
-        let location = CLLocationCoordinate2D(
-            latitude: latitude,
-            longitude: longitude
-        )
-
+        let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
         let span = MKCoordinateSpanMake(0.001, 0.001)
         let region = MKCoordinateRegion(center: location, span: span)
         mapView.setRegion(region, animated: true)
 
         let annotation = MKPointAnnotation()
+        annotation.title = pinTitle
         annotation.coordinate = location
         mapView.addAnnotation(annotation)
-        
+
         let mapCamera = MKMapCamera()
         mapCamera.centerCoordinate = location
         mapCamera.pitch = 45
@@ -73,27 +78,29 @@ public class SwiftMapVC: UIViewController {
     override public func viewWillAppear(_ animated: Bool) {
         assert(self.navigationController != nil, "SVMapViewController needs to be contained in a UINavigationController. If you are presenting SVMapViewController modally, use SVModalMapViewController instead.")
 
-        let navBarTitle = UILabel()
-        navBarTitle.text = pinTitle
-        navBarTitle.sizeToFit()
+        if pageTitle != pinTitle {
+            let navBarTitle = UILabel()
+            navBarTitle.text = pageTitle
+            navBarTitle.sizeToFit()
 
-        if presentingViewController == nil {
-            if let titleAttributes = navigationController!.navigationBar.titleTextAttributes {
-                navBarTitle.textColor = titleAttributes["NSColor"] as! UIColor
+            if presentingViewController == nil {
+                if let titleAttributes = navigationController!.navigationBar.titleTextAttributes {
+                    navBarTitle.textColor = NSAttributedStringKey.strokeColor as! UIColor //titleAttributes["NSColor"] as! UIColor
+                }
+            } else {
+                navBarTitle.textColor = self.titleColor
             }
-        } else {
-            navBarTitle.textColor = self.titleColor
-        }
-        navBarTitle.shadowOffset = CGSize(width: 0, height: 1)
-        navBarTitle.font = UIFont(name: "HelveticaNeue-Medium", size: 17.0)
+            navBarTitle.shadowOffset = CGSize(width: 0, height: 1)
+            navBarTitle.font = UIFont(name: "HelveticaNeue-Medium", size: 17.0)
 
-        navigationItem.titleView = navBarTitle
+            navigationItem.titleView = navBarTitle
+        }
 
         super.viewWillAppear(true)
         self.navigationController?.setToolbarHidden(true, animated: false)
     }
 
-    func doneButtonTapped() {
+    @objc func doneButtonTapped() {
         closing = true
         UINavigationBar.appearance().barStyle = storedStatusColor!
         self.dismiss(animated: true, completion: nil)
