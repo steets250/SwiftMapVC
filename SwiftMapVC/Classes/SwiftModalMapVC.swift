@@ -12,12 +12,12 @@ public class SwiftModalMapVC: UINavigationController {
     public enum SwiftModalMapVCTheme {
         case lightBlue, dark
     }
-
+    
     public init(room: String, building: String, floor: Int, latitude: Double, longitude: Double, theme: SwiftModalMapVCTheme = .lightBlue) {
         let mapViewController = SwiftMapVC(room: room, building: building, floor: floor, latitude: latitude, longitude: longitude)
         mapViewController.storedStatusColor = UINavigationBar.appearance().barStyle
         let doneButton = UIBarButtonItem(image: #imageLiteral(resourceName: "Dismiss"),
-                                         style: UIBarButtonItemStyle.plain,
+                                         style: UIBarButtonItem.Style.plain,
                                          target: mapViewController,
                                          action: #selector(SwiftMapVC.doneButtonTapped))
         switch theme {
@@ -32,19 +32,19 @@ public class SwiftModalMapVC: UINavigationController {
             mapViewController.titleColor = .groupTableViewBackground
             UINavigationBar.appearance().barStyle = UIBarStyle.black
         }
-
+        
         mapViewController.navigationItem.rightBarButtonItem = doneButton
         super.init(rootViewController: mapViewController)
     }
-
+    
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
-
+    
     required public init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     override public func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
     }

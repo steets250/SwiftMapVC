@@ -14,19 +14,19 @@ public class SwiftMapVC: UIViewController {
     var titleColor: UIColor?
     var closing: Bool! = false
     var locationManager: CLLocationManager!
-
+    
     lazy var mapView: MKMapView = {
         var tempMapView = MKMapView(frame: UIScreen.main.bounds)
         return tempMapView
     }()
-
+    
     var pinTitle: String!
     var pageTitle: String!
     var latitude: Double!
     var longitude: Double!
-
+    
     ////////////////////////////////////////////////
-
+    
     public convenience init(room: String, building: String, floor: Int, latitude: Double, longitude: Double) {
         self.init()
         self.pinTitle = room
@@ -40,33 +40,33 @@ public class SwiftMapVC: UIViewController {
         self.latitude = latitude
         self.longitude = longitude
     }
-
+    
     ////////////////////////////////////////////////
     // View Lifecycle
-
+    
     override public func loadView() {
         view = mapView
     }
-
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
-
+        
         mapView.mapType = MKMapType.standard
         mapView.showsUserLocation = true
         mapView.showsScale = true
         mapView.showsCompass = true
         mapView.showsBuildings = true
-
+        
         let location = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-        let span = MKCoordinateSpanMake(0.001, 0.001)
+        let span = MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001)
         let region = MKCoordinateRegion(center: location, span: span)
         mapView.setRegion(region, animated: true)
-
+        
         let annotation = MKPointAnnotation()
         annotation.title = pinTitle
         annotation.coordinate = location
         mapView.addAnnotation(annotation)
-
+        
         let mapCamera = MKMapCamera()
         mapCamera.centerCoordinate = location
         mapCamera.pitch = 45
@@ -74,38 +74,38 @@ public class SwiftMapVC: UIViewController {
         mapCamera.heading = 329
         mapView.camera = mapCamera
     }
-
+    
     override public func viewWillAppear(_ animated: Bool) {
         assert(self.navigationController != nil, "SVMapViewController needs to be contained in a UINavigationController. If you are presenting SVMapViewController modally, use SVModalMapViewController instead.")
-
+        
         if pageTitle != pinTitle {
             let navBarTitle = UILabel()
             navBarTitle.text = pageTitle
             navBarTitle.sizeToFit()
-
+            
             if presentingViewController == nil {
                 if let titleAttributes = navigationController!.navigationBar.titleTextAttributes {
-                    navBarTitle.textColor = NSAttributedStringKey.strokeColor as! UIColor //titleAttributes["NSColor"] as! UIColor
+                    navBarTitle.textColor = NSAttributedString.Key.strokeColor as! UIColor //titleAttributes["NSColor"] as! UIColor
                 }
             } else {
                 navBarTitle.textColor = self.titleColor
             }
             navBarTitle.shadowOffset = CGSize(width: 0, height: 1)
             navBarTitle.font = UIFont(name: "HelveticaNeue-Medium", size: 17.0)
-
+            
             navigationItem.titleView = navBarTitle
         }
-
+        
         super.viewWillAppear(true)
         self.navigationController?.setToolbarHidden(true, animated: false)
     }
-
+    
     @objc func doneButtonTapped() {
         closing = true
         UINavigationBar.appearance().barStyle = storedStatusColor!
         self.dismiss(animated: true, completion: nil)
     }
-
+    
     class func bundledImage(named: String) -> UIImage? {
         let image = UIImage(named: named)
         if image == nil {
